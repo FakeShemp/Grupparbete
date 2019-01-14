@@ -1,9 +1,31 @@
 var animalBall;
-var obsticle;
+var obsticle = new Array();
+var screenWidth = 1024;
+var screenHeight = 576;
+var obsticleCoords = [
+    [0, -10, 1024, 10],
+    [0, 576, 1024, 10],
+    [-10, 0, 10, 576],
+    [1024, 0, 10, 576],
+    [100, 0, 20, 500],
+    [200, 100, 20, 476],
+    [220, 100, 676, 20],
+    [720, 220, 304, 20],
+    [720, 240, 20, 200],
+    [480, 420, 240, 20],
+    [600, 120, 20, 200],
+    [480, 240, 20, 200],
+    [340, 240, 20, 336],
+    [600, 440, 20, 50],
+    [864, 340, 20, 236]
+]
 var cheese;
 var minValue = 0.01;
 var pointerSpeed = 0.2;
-var maxSpeed = 5;
+var maxSpeed = 7;
+var lockInput = true;
+var countDownTimer;
+var interval;
 
 function points2vec(v1, v2) {
     return new vec2(v1.x - v2.x, v1.y - v2.y);
@@ -62,6 +84,29 @@ function vec2(x, y) {
     }
 }
 
+var timer = {
+    zero: "0:00:000",
+    start: Date.now(),
+    textObject: undefined,
+    run: false,
+    ellapsedTime: function () {
+        return Date.now() - this.start;
+    },
+    formatTime: function (time) {
+        var m = Math.floor(time / 60000);
+        var s = ((time % 60000) / 1000).toFixed(0);
+        var ms = time.toString().slice(-3);
+
+        return m + ':' + (s < 10 ? '0' : '') + s + ':' + ms;
+    },
+    update: function () {
+        if (this.run) {
+            this.textObject.string = this.formatTime(this.ellapsedTime());
+        }
+        this.textObject.update();
+    }
+}
+
 var intersection = {
     circlePoint: function (circle, point) {
         var delta = circle.position.subtract(point);
@@ -102,9 +147,32 @@ var intersection = {
 
 function startGame() {
     animalBall = new circle(50, 50, 20);
-    obsticle = new rectangle(200, 200, 50, 200);
-    cheese = new drawImage("assets/cheese.svg", 900, 500, 10, 10)
+    for (i in obsticleCoords) {
+        obsticle.push(new rectangle(obsticleCoords[i][0], obsticleCoords[i][1], obsticleCoords[i][2], obsticleCoords[i][3]));
+    }
+    // cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "assets/cheese.svg");
+    cheese = new graphics(50 - 15, 200, 30, 30, "assets/cheese.svg");
+    countDownTimer = new text(5, screenWidth / 2, screenHeight / 2, "Arial", 100);
+    timer.textObject = new text(timer.zero, screenWidth - 130, 40, "Arial", 30);
+    interval = setInterval(countDown, 1000);
     gameArea.start();
+}
+
+function removeCountDown() {
+    countDownTimer = undefined;
+    clearInterval(interval);
+}
+
+function countDown() {
+    if (countDownTimer.string == 1) {
+        countDownTimer.string = "Go!"
+        timer.start = Date.now();
+        setTimeout(removeCountDown, 1000);
+        lockInput = false;
+        timer.run = true;
+        return;
+    };
+    countDownTimer.string = countDownTimer.string - 1;
 }
 
 var gameArea = {
@@ -180,60 +248,96 @@ function rectangle(x, y, width, height) {
     }
 }
 
-function drawImage(url, x, y, width, height) {
-    this.url = url;
-    this.position = new vec2(x, y);
-    this.width = width;
-    this.height = height;
+function graphics(x, y, width, height, url) {
+    rectangle.call(this, x, y, width, height)
+
     this.img = new Image;
     this.img.src = url;
-    this.midpoint = function () {
-        return new vec2(this.position.x + this.width / 2, this.position.y + this.height / 2);
-    }
     this.update = function () {
         ctx = gameArea.context;
         ctx.drawImage(this.img, this.position.x, this.position.y, this.width, this.height);
     }
 }
 
+function text(string, x, y, font, size) {
+    this.position = new vec2(x, y);
+    this.string = string;
+    this.font = font;
+    this.size = size;
+    this.update = function () {
+        ctx = gameArea.context;
+        ctx.fillStyle = "purple";
+        ctx.font = this.size + "px " + this.font;
+        ctx.fillText(this.string, this.position.x, this.position.y);
+    }
+}
+
 function updateGame() {
+    var intersect = false;
     gameArea.clear();
-    if (gameArea.mouseX && gameArea.mouseY) {
-        // Current vector of moving ball
-        var ballVector = animalBall.direction().multiplyI(animalBall.speed());
 
-        if (gameArea.mouseHold) {
-            var ball2mouseVec = points2vec(animalBall.position, new vec2(gameArea.mouseX, gameArea.mouseY));
+    if (lockInput == false) {
+        if (gameArea.mouseX && gameArea.mouseY) {
+            // Current vector of moving ball
+            var ballVector = animalBall.direction().multiplyI(animalBall.speed());
 
-            // The influence of the mouse cursor
-            var influence = ball2mouseVec.normalized().multiplyI(pointerSpeed)
-            var newBallVector = ballVector.subtract(influence);
+            if (gameArea.mouseHold) {
+                var ball2mouseVec = points2vec(animalBall.position, new vec2(gameArea.mouseX, gameArea.mouseY));
 
-            if (newBallVector.magnitude() > maxSpeed) {
-                newBallVector = newBallVector.normalized().multiplyI(maxSpeed);
+                // The influence of the mouse cursor
+                var influence = ball2mouseVec.normalized().multiplyI(pointerSpeed)
+                var newBallVector = ballVector.subtract(influence);
+
+                if (newBallVector.magnitude() > maxSpeed) {
+                    newBallVector = newBallVector.normalized().multiplyI(maxSpeed);
+                }
             }
-        }
-        else {
-            var newBallVector = ballVector.multiplyI(0.95);
-        }
+            else {
+                var newBallVector = ballVector.multiplyI(0.95);
+            }
 
-        var newPos = animalBall.position.add(newBallVector);
-        if (intersection.circleRectangle(animalBall, obsticle)) {
-            var line = intersection.nearestLine(animalBall, obsticle);
-            var refl = line.reflection(animalBall.direction());
-            animalBall.color = "green";
-            animalBall.position = animalBall.previousPosition;
-            animalBall.newPosition(animalBall.position.add(refl.multiplyI(newBallVector.magnitude() * 0.75)));
-        }
-        else {
-            animalBall.color = "blue";
-            animalBall.newPosition(newPos);
+            for (i in obsticle) {
+                if (intersection.circleRectangle(animalBall, obsticle[i])) {
+                    var line = intersection.nearestLine(animalBall, obsticle[i]);
+                    var refl = line.reflection(animalBall.direction());
+                    animalBall.color = "green";
+                    animalBall.position = animalBall.previousPosition;
+                    animalBall.newPosition(animalBall.position.add(refl.multiplyI(newBallVector.magnitude() * 0.75)));
+                    intersect = true;
+                    break;
+                }
+            }
+
+            if (cheese) {
+                if (intersection.circleRectangle(animalBall, cheese)) {
+                    cheese = undefined;
+                    timer.run = false;
+                    console.log("You win the game!")
+                }
+            }
+
+            if (intersect != true) {
+                animalBall.color = "blue";
+                animalBall.newPosition(animalBall.position.add(newBallVector));
+            }
         }
     }
 
-    obsticle.update();
-    animalBall.update();
-    cheese.update();
+    for (i in obsticle) {
+        obsticle[i].update();
+    }
+    if (cheese) {
+        cheese.update();
+    }
+    if (animalBall) {
+        animalBall.update();
+    }
+    if (countDownTimer) {
+        countDownTimer.update();
+    }
+    if (timer) {
+        timer.update()
+    }
 }
 
 window.onload = startGame();
