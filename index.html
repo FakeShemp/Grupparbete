@@ -1,15 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Game</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <meta charset="UTF-8">
+
+    <title>RPG Game</title>
+    
+    <!-- Memory Game CSS (Janessa Johansson) -->
+    <link rel="stylesheet" href="memory.css">
+
+    <!-- Labyrinth (Rebecca W.) -->
+
+    <!-- Typespeed Game CSS (Martin K.) -->
+
+    <!-- Snake CSS (Aaron S.) -->
+
 </head>
+
 <body>
-    <p>Game</p>
-    <button>Start Game</button>
+
+    <!-- Mapped SVG (Janessa Johansson) -->
+
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 944">
+        <image width="1200" height="944" xlink:href="img/LDGame_Splash.png"></image><a xlink:href="#memory">
+            <title class="tip">Memory Game. Awards Gold Key.</title>
+            <rect id="memory" onclick="startGame()" x="661" y="573" fill="#fff" opacity="0" width="142" height="100"></rect>
+        </a><a xlink:href="#type">
+            <title>Typespeed Game. Awards Red Key.</title>
+            <rect x="220" y="491" fill="#fff" opacity="0" width="295" height="190"></rect>
+        </a><a xlink:href="#snake">
+            <title>Snake Game. Awards Pink Key.</title>
+            <rect x="43" y="66" fill="#fff" opacity="0" width="237" height="402"></rect>
+        </a><a xlink:href="#maze">
+            <title>Maze Game. Awards Purple Key.</title>
+            <rect x="913" y="53" fill="#fff" opacity="0" width="231" height="427"></rect>
+        </a><a xlink:href="#door">
+            <title>The door. Win all the keys to escape.</title>
+            <rect id="keys" onclick="checkKeys()" x="495" y="206" fill="#fff" opacity="0" width="213" height="300"></rect>
+        </a>
+    </svg>
+
+    <!-- Memory Game (Janessa Johansson) -->
+    <div id="fade" class="phase2"></div>
+    <section id="game" class="game phase2">
+        <div class="card" data-name="rose">
+            <img class="front" src="img/MemoryGame/Order-of-the-Bloody-Rose.svg" alt="sons">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="guardian">
+            <img class="front" src="img/MemoryGame/guardians-of-the-covenant.svg" alt="guardian">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="guardian">
+            <img class="front" src="img/MemoryGame/guardians-of-the-covenant.svg" alt="guardian">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="sons">
+            <img class="front" src="img/MemoryGame/Thousand-sons.svg" alt="sons">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="sons">
+            <img class="front" src="img/MemoryGame/Thousand-sons.svg" alt="sons">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="cali">
+            <img class="front" src="img/MemoryGame/Disciples-of-Caliban.svg" alt="cali">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="cali">
+            <img class="front" src="img/MemoryGame/Disciples-of-Caliban.svg" alt="cali">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="lament">
+            <img class="front" src="img/MemoryGame/Lamenters.svg" alt="lament">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+
+        <div class="card" data-name="lament">
+            <img class="front" src="img/MemoryGame/Lamenters.svg" alt="lament">
+            <img class="back" src="img/MemoryGame/black-legion.svg" alt="Card">
+        </div>
+    </section>
+    <div id="winfade" class="phase2"></div>
+    <div id="win" class="phase2">
+        <p>You win! You've earned a gold key!</p>
+        <img class="key" src="img/MemoryGame/gold-olde-key.svg" alt="">
+        <button id="okay">Okay</button>
+    </div>
+
+    <script src="memory.js"></script>
+
+    <!-- Labyrinth (Rebecca W.) -->
+
+    <!-- Typespeed Game (Martin K.) -->
+
+    <!-- Snake (Aaron S.) -->
+
 </body>
+
 </html>
