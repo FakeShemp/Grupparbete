@@ -48,7 +48,7 @@ var score = 0;
 //check for item
 if (localStorage.getItem('yes')) {
   score = 5;
-  alert("The silver orb grants you 5 points!"")
+  alert("The silver orb grants you 5 points!")
 }
 
 pipe[0] = {
