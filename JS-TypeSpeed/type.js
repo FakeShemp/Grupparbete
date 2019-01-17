@@ -1,8 +1,8 @@
 
 
 // Variabler som kommer användas i spelet
-let playerKeys = []
-let playername = 'Martin'
+var playerKeys
+var playername
 let level = 0 // Håller reda på vilken nivå spelaren är på.
 let round = 0 // Håller reda på vilken runda inom nivån.
 let countdown // Håller reda på nedräkning
