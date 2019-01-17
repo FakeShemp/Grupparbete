@@ -1,3 +1,4 @@
+var _canvas;
 var animalBall;
 var obsticle = new Array();
 var screenWidth = 1024;
@@ -18,7 +19,7 @@ var obsticleCoords = [
     [340, 240, 20, 336],
     [600, 440, 20, 50],
     [864, 340, 20, 236]
-]
+];
 var cheese;
 var minValue = 0.01;
 var pointerSpeed = 0.2;
@@ -122,22 +123,32 @@ var intersection = {
         return new vec2(nearestX, nearestY);
     },
     nearestLine: function (circle, rectangle) {
+        var intrsct = "top";
         var nearest = this.nearestPoint(circle, rectangle);
         if (nearest.x > rectangle.position.x) {
             if (nearest.y > rectangle.position.y) {
                 if (nearest.y == rectangle.position.y + rectangle.height) {
-                    console.log("mmmm");
-                    return rectangle.lineBottom();
+                    intrsct = "bottom";
                 }
                 else {
-                    return rectangle.lineLeft();
+                    intrsct = "left";
                 }
             }
         }
         else if (nearest.x == rectangle.position.x) {
-            return rectangle.lineRight();
+            intrsct = "right";
         }
-        return rectangle.lineTop();
+
+        switch (intrsct) {
+            case "top":
+                return rectangle.lineTop();
+            case "bottom":
+                return rectangle.lineBottom();
+            case "left":
+                return rectangle.lineLeft();
+            case "right":
+                return rectangle.lineRight();
+        }
     },
     circleRectangle: function (circle, rectangle) {
         var point = this.nearestPoint(circle, rectangle);
@@ -146,12 +157,19 @@ var intersection = {
 }
 
 function startGame() {
+    var container = document.querySelector(".container");
+    _canvas = document.createElement("canvas");
+    _canvas.setAttribute('id', "maze");
+    _canvas.setAttribute('width', screenWidth);
+    _canvas.setAttribute('height', screenHeight);
+    container.appendChild(_canvas);
+
     animalBall = new circle(50, 50, 20);
     for (i in obsticleCoords) {
         obsticle.push(new rectangle(obsticleCoords[i][0], obsticleCoords[i][1], obsticleCoords[i][2], obsticleCoords[i][3]));
     }
-    // cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "assets/cheese.svg");
-    cheese = new graphics(50 - 15, 200, 30, 30, "assets/cheese.svg");
+    cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "assets/cheese.svg");
+    // cheese = new graphics(50 - 15, 200, 30, 30, "assets/cheese.svg");
     countDownTimer = new text(5, screenWidth / 2, screenHeight / 2, "Arial", 100);
     timer.textObject = new text(timer.zero, screenWidth - 130, 40, "Arial", 30);
     interval = setInterval(countDown, 1000);
@@ -176,9 +194,9 @@ function countDown() {
 }
 
 var gameArea = {
-    canvas: document.getElementById("maze"),
     mouseHold: false,
     start: function () {
+        this.canvas = _canvas;
         this.context = this.canvas.getContext("2d");
         this.interval = setInterval(updateGame, 20);
         var rect = this.canvas.getBoundingClientRect();
@@ -323,8 +341,13 @@ function updateGame() {
         }
     }
 
-    for (i in obsticle) {
+    var i = 0;
+    while (true) {
+        if (i >= obsticle.length) {
+            break;
+        }
         obsticle[i].update();
+        i++;
     }
     if (cheese) {
         cheese.update();
