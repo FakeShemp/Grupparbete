@@ -10,7 +10,7 @@
     width: 1024;
     height: 576px;
     border: 1px solid black;
-    background-color: aquamarine;
+    background-image: url("assets/ground.jpg");
 }
 
 #winfade_maze {

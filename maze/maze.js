@@ -1,5 +1,6 @@
 var _canvas;
-var animalBall;
+var hamsterBall;
+var hamsterVector = new vec2(0,-1);
 var obsticle = new Array();
 var screenWidth = 1024;
 var screenHeight = 576;
@@ -21,6 +22,7 @@ var obsticleCoords = [
     [864, 340, 20, 236]
 ];
 var cheese;
+var hamster;
 var minValue = 0.01;
 var pointerSpeed = 0.2;
 var maxSpeed = 7;
@@ -28,6 +30,10 @@ var lockInput = true;
 var countDownTimer;
 var interval;
 var mazeItemChoice;
+var hedge = new Image();
+hedge.src = 'maze/assets/hedge.jpg'; 
+var ground = new Image();
+ground.src = 'maze/assets/ground.jpg'; 
 
 if (mazeItemChoice[0] == "y") {
     maxSpeed = 4;
@@ -88,6 +94,12 @@ function vec2(x, y) {
     }
     this.inverse = function () {
         return new vec2(-this.x, -this.y);
+    }
+    this.dot = function(v) {
+        return this.x * v.x + this.y * v.y;
+    }
+    this.determinant = function (v) {
+        return this.x * v.y - this.y * v.x;
     }
 }
 
@@ -173,12 +185,13 @@ function startMazeGame() {
     _canvas.setAttribute('height', screenHeight);
     container.appendChild(_canvas);
 
-    animalBall = new circle(50, 50, 20);
+    hamsterBall = new circle(50, 50, 20);
     for (i in obsticleCoords) {
         obsticle.push(new rectangle(obsticleCoords[i][0], obsticleCoords[i][1], obsticleCoords[i][2], obsticleCoords[i][3]));
     }
-    // cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "maze/assets/cheese.svg");
-    cheese = new graphics(50 - 15, 200, 30, 30, "maze/assets/cheese.svg");
+    hamster = new graphics(0, 0, 25, 25, "maze/assets/hamster.svg", false);
+    cheese = new graphics(screenWidth - 100, screenHeight - 100, 70, 70, "maze/assets/cheese.svg", true);
+    // cheese = new graphics(50 - 15, 200, 30, 30, "maze/assets/cheese.svg", true);
     countDownTimer = new text(5, screenWidth / 2, screenHeight / 2, "Arial", 100);
     timer.textObject = new text(timer.zero, screenWidth - 130, 40, "Arial", 30);
     interval = setInterval(countDown, 1000);
@@ -208,6 +221,7 @@ var gameArea = {
         this.canvas = _canvas;
         this.context = this.canvas.getContext("2d");
         this.interval = setInterval(updateGame, 20);
+
         var rect = this.canvas.getBoundingClientRect();
         window.addEventListener("mousemove", function (e) {
             gameArea.mouseX = e.clientX - rect.left;
@@ -229,7 +243,6 @@ function circle(x, y, rad) {
     this.previousPosition = new vec2(x - minValue, y - minValue);
     this.position = new vec2(x, y);
     this.radius = rad;
-    this.color = "blue";
     this.direction = function () {
         return points2vec(this.position, this.previousPosition).normalized();
     }
@@ -240,7 +253,12 @@ function circle(x, y, rad) {
         ctx = gameArea.context;
         ctx.beginPath();
         ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI);
-        ctx.fillStyle = this.color;
+
+        var grad = ctx.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, this.radius + 3);
+        grad.addColorStop(0, 'transparent');
+        grad.addColorStop(1, "white");
+
+        ctx.fillStyle = grad;
         ctx.fill();
     }
     this.newPosition = function (p) {
@@ -270,19 +288,38 @@ function rectangle(x, y, width, height) {
     }
     this.update = function () {
         ctx = gameArea.context;
-        ctx.fillStyle = "red";
+        
+        var pattern = ctx.createPattern(hedge, "repeat");
+        ctx.fillStyle = pattern;
+
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }
 
-function graphics(x, y, width, height, url) {
+function graphics(x, y, width, height, url, fixed) {
     rectangle.call(this, x, y, width, height)
 
     this.img = new Image;
     this.img.src = url;
+    this.fixed = fixed;
     this.update = function () {
         ctx = gameArea.context;
+        ctx.save();
+        if (!this.fixed) {
+            this.position.x = hamsterBall.position.x - (this.width / 2) + (Math.random() * hamsterBall.speed() / 2);
+            this.position.y = hamsterBall.position.y - (this.height / 2) + (Math.random() * hamsterBall.speed() / 2);
+            ctx.translate(this.position.x, this.position.y);
+            ctx.translate(this.width / 2, this.height / 2);
+
+            var b2m = points2vec(hamsterBall.position, new vec2(gameArea.mouseX, gameArea.mouseY));
+            var angle = Math.atan2(b2m.determinant(hamsterVector), b2m.dot(hamsterVector));
+
+            ctx.rotate(-angle);
+            ctx.translate(-(this.width / 2), -(this.height / 2));
+            ctx.translate(-this.position.x, -this.position.y);
+        }
         ctx.drawImage(this.img, this.position.x, this.position.y, this.width, this.height);
+        ctx.restore();
     }
 }
 
@@ -306,10 +343,10 @@ function updateGame() {
     if (lockInput == false) {
         if (gameArea.mouseX && gameArea.mouseY) {
             // Current vector of moving ball
-            var ballVector = animalBall.direction().multiplyI(animalBall.speed());
+            var ballVector = hamsterBall.direction().multiplyI(hamsterBall.speed());
 
             if (gameArea.mouseHold) {
-                var ball2mouseVec = points2vec(animalBall.position, new vec2(gameArea.mouseX, gameArea.mouseY));
+                var ball2mouseVec = points2vec(hamsterBall.position, new vec2(gameArea.mouseX, gameArea.mouseY));
 
                 // The influence of the mouse cursor
                 var influence = ball2mouseVec.normalized().multiplyI(pointerSpeed)
@@ -324,19 +361,19 @@ function updateGame() {
             }
 
             for (i in obsticle) {
-                if (intersection.circleRectangle(animalBall, obsticle[i])) {
-                    var line = intersection.nearestLine(animalBall, obsticle[i]);
-                    var refl = line.reflection(animalBall.direction());
-                    animalBall.color = "green";
-                    animalBall.position = animalBall.previousPosition;
-                    animalBall.newPosition(animalBall.position.add(refl.multiplyI(newBallVector.magnitude() * 0.75)));
+                if (intersection.circleRectangle(hamsterBall, obsticle[i])) {
+                    var line = intersection.nearestLine(hamsterBall, obsticle[i]);
+                    var refl = line.reflection(hamsterBall.direction());
+                    hamsterBall.color = "green";
+                    hamsterBall.position = hamsterBall.previousPosition;
+                    hamsterBall.newPosition(hamsterBall.position.add(refl.multiplyI(newBallVector.magnitude() * 0.75)));
                     intersect = true;
                     break;
                 }
             }
 
             if (cheese) {
-                if (intersection.circleRectangle(animalBall, cheese)) {
+                if (intersection.circleRectangle(hamsterBall, cheese)) {
                     cheese = undefined;
                     timer.run = false;
                     setTimeout(function () {
@@ -358,9 +395,11 @@ function updateGame() {
             }
 
             if (intersect != true) {
-                animalBall.color = "blue";
-                animalBall.newPosition(animalBall.position.add(newBallVector));
+                hamsterBall.newPosition(hamsterBall.position.add(newBallVector));
             }
+
+            // hamster.position.x = hamsterBall.position.x;
+            // hamster.position.y = hamsterBall.position.y;
         }
     }
 
@@ -375,8 +414,12 @@ function updateGame() {
     if (cheese) {
         cheese.update();
     }
-    if (animalBall) {
-        animalBall.update();
+
+    if (hamsterBall) {
+        hamsterBall.update();
+    }
+    if (hamster) {
+        hamster.update();
     }
     if (countDownTimer) {
         countDownTimer.update();
