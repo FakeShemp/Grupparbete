@@ -264,7 +264,7 @@ function checkKeys() {
       addPinkKey();
     }
     //If red key exists in local storage, from popup, add it to the array.If not do nothing.
-    if (!playerKeys.indexOf("red key") == -1) {
+    if (playerKeys.indexOf("red key") == -1) {
       addRedKey();
     }
 
