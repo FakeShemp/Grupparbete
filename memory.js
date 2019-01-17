@@ -6,7 +6,7 @@
 var itemChoice;
 console.log("My page: " + itemChoice);
 
-function startGame() {
+function startMemoryGame() {
 
     var answer;
 
