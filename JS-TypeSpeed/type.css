@@ -1,0 +1,43 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#all {
+    margin: 200px;
+    border: solid black 1px;
+    background-color: grey;
+    height: 500px;
+    text-align: center;
+    
+}
+
+#textinput {
+    font-size: 24px;
+}
+
+
+#reward {
+    height: 263px;
+    width: 480px;
+}
+
+
+h1 {
+    text-align: center;
+}
+
+#resultmessage,
+h3,
+#scoretag,
+#timetag {
+    margin-right: 20px;
+
+}
+
+#gamescreen,
+#gamewin,
+#gameover {
+    display: none;
+    text-align: center;
+}
