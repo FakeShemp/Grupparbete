@@ -231,7 +231,7 @@ var playerKeys = [];
 var keySuccess = ["gold key", "red key", "purple key", "pink key"];
 
 // Variables playerKeys and keySuccess are not accessible from the other game windows
-localStorage.setItem('playerKeys', [])
+localStorage.setItem('playerKeys', []);
 
 // Add the gold from winning the Memory game.
 
@@ -241,11 +241,29 @@ function addGoldKey() {
     console.log(playerKeys);
 }
 
+// Add the pink key from winning the Snake game.
+function addPinkKey() {
+    if(localStorage.getItem('pinkKey')) {
+        playerKeys.push(localStorage.getItem('pinkKey');
+    }
+}
+
+// Add the red key from winning the typing game.
+function addRedKey() {
+    if(localStorage.getItem('redKey')) {
+        playerKeys.push(localStorage.getItem('redKey');
+    }
+}
+
 // Handles checking if the player has all the keys in order to open the door.
 
 var playerName;
 
 function checkKeys() {
+    //If pink key exists in local storage, from popup, add it to the array.If not do nothing.
+    addPinkKey();
+    //If red key exists in local storage, from popup, add it to the array.If not do nothing.
+    addRedKey();
 
     var success = keySuccess.every(function (val) {
         return playerKeys.indexOf(val) !== -1;
