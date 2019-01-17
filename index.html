@@ -34,7 +34,7 @@
             <rect x="43" y="66" fill="#fff" opacity="0" width="237" height="402"></rect>
         </a><a xlink:href="#maze">
             <title>Maze Game. Awards Purple Key.</title>
-            <rect x="913" y="53" fill="#fff" opacity="0" width="231" height="427"></rect>
+            <rect id="maze" onclick="startMazeGame()" x="913" y="53" fill="#fff" opacity="0" width="231" height="427"></rect>
         </a><a xlink:href="#door">
             <title>The door. Win all the keys to escape.</title>
             <rect id="keys" onclick="checkKeys()" x="495" y="206" fill="#fff" opacity="0" width="213" height="300"></rect>
@@ -110,6 +110,8 @@
         </div>
     </div>
     <!-- Character/Item (Janessa Johansson) -->
+
+    <div class="mazeContainer"></div>
 
     <script>
         var itemChoice;

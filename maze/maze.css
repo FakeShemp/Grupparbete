@@ -1,9 +1,9 @@
-.container {
+.mazeContainer {
     display: flex;
     justify-content: center;
 }
 
-#maze {
+#maizeMaze {
     width: 1024;
     height: 576px;
     border: 1px solid black;

@@ -156,10 +156,10 @@ var intersection = {
     }
 }
 
-function startGame() {
-    var container = document.querySelector(".container");
+function startMazeGame() {
+    var container = document.querySelector(".mazeContainer");
     _canvas = document.createElement("canvas");
-    _canvas.setAttribute('id', "maze");
+    _canvas.setAttribute('id', "maizeMaze");
     _canvas.setAttribute('width', screenWidth);
     _canvas.setAttribute('height', screenHeight);
     container.appendChild(_canvas);
@@ -168,8 +168,8 @@ function startGame() {
     for (i in obsticleCoords) {
         obsticle.push(new rectangle(obsticleCoords[i][0], obsticleCoords[i][1], obsticleCoords[i][2], obsticleCoords[i][3]));
     }
-    cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "assets/cheese.svg");
-    // cheese = new graphics(50 - 15, 200, 30, 30, "assets/cheese.svg");
+    cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "maze/assets/cheese.svg");
+    // cheese = new graphics(50 - 15, 200, 30, 30, "maze/assets/cheese.svg");
     countDownTimer = new text(5, screenWidth / 2, screenHeight / 2, "Arial", 100);
     timer.textObject = new text(timer.zero, screenWidth - 130, 40, "Arial", 30);
     interval = setInterval(countDown, 1000);
@@ -331,6 +331,8 @@ function updateGame() {
                     cheese = undefined;
                     timer.run = false;
                     console.log("You win the game!")
+                    addPurpleKey();
+                    document.getElementById("memory").outerHTML = "";
                 }
             }
 
@@ -363,4 +365,11 @@ function updateGame() {
     }
 }
 
-window.onload = startGame();
+var playerKeys;
+function addPurpleKey() {
+    let purpleKey = "purple key";
+    playerKeys.push(purpleKey);
+    console.log(playerKeys);
+}
+
+//window.onload = startMazeGame();
