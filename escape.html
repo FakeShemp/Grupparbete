@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <title>You Escape!</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="escape.css">
+</head>
+
+<body>
+    <div id="escape" class="text-anim">
+        <span>You</span>
+        <span>unlock</span>
+        <span>the</span>
+        <span>door</span>
+        <span>and</span>
+        <span>escape</span>
+        <span>the</span>
+        <span>room.</span>
+    </div>
+
+</body>
+<script>
+    setInterval(function () {
+        $('.text-anim').toggleClass('animate');
+    }, 2000);
+</script>
+
+</html>

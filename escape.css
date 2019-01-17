@@ -1,0 +1,48 @@
+body {
+  background: #000000;
+  background-size: cover;
+  font-family: 'Cinzel', serif;
+
+}
+
+#escape {
+  margin-top: 25%;
+}
+
+.text-anim {
+  color: #ffffff;
+  opacity: 0;
+  font-size: 45px;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  animation: fadeIn 5s 1s forwards;
+}
+
+.text-anim2 {
+  color: #ffffff;
+  opacity: 0;
+  font-size: 32px;
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: .5;
+    }
+    70% {
+        opacity: .7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
