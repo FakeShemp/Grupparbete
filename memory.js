@@ -6,12 +6,12 @@
 var itemChoice;
 console.log("My page: " + itemChoice);
 
-function startMemoryGame() {
+function startGame() {
 
     var answer;
 
 // Depending on what the player chooses (yes or no), the face of one card changes depending
-// on what they choose in the following function.    
+// on what they choose in the following function.
     if (itemChoice == "yes") {
         while (answer != "rose" && answer != "skull" && answer != "dragon") {
             var answer = prompt("You come across dusty old cards. One of them is blank. Which image should it have? (Choose: skull, rose, dragon)");
@@ -63,7 +63,7 @@ function flipCard() {
     checkForMatch();
 }
 
-// If the cards are NOT a match, invokes unflipCards function. 
+// If the cards are NOT a match, invokes unflipCards function.
 // If they ARE a match, invokes disableCards function.
 // Each time cards are flipped, the complete function is invoked to see if all matches have been made.
 // This counts as a player move and all player moves are recorded.
@@ -84,7 +84,7 @@ function checkForMatch() {
     completeGame();
 }
 
-// Removes events listeners on matched cards and adds a class called 'match'. 
+// Removes events listeners on matched cards and adds a class called 'match'.
 // ('Match' is used by the complete function to see if all matches have been made.)
 // The board then resets.
 
@@ -229,6 +229,9 @@ function soundEffect() {
 
 var playerKeys = [];
 var keySuccess = ["gold key", "red key", "purple key", "pink key"];
+
+// Variables playerKeys and keySuccess are not accessible from the other game windows
+localStorage.setItem('playerKeys', [])
 
 // Add the gold from winning the Memory game.
 

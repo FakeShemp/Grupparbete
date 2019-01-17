@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="maze/maze.css">
 
     <!-- Typespeed Game CSS (Martin K.) -->
-    <link rel="stylesheet" href="JS-TypeSpeed/type.css">
+
     <!-- Snake CSS (Aaron S.) -->
 
 </head>
@@ -25,14 +25,14 @@
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 944">
         <image width="1200" height="944" xlink:href="img/LDGame_Splash.png"></image><a xlink:href="#memory">
             <title class="tip">Memory Game. Awards Gold Key.</title>
-            <rect id="memory" onclick="startMemoryGame()" x="661" y="573" fill="#fff" opacity="0" width="142" height="100"></rect>
+            <rect id="memory" onclick="startGame()" x="661" y="573" fill="#fff" opacity="0" width="142" height="100"></rect>
         </a><a xlink:href="#type">
             <title>Typespeed Game. Awards Red Key.</title>
             <rect x="220" y="491" fill="#fff" opacity="0" width="295" height="190"></rect>
-        </a><a xlink:href="#snake">
+        </a><a onclick="window.open('Flappy_Bird_2/flappy_bird.html', 'popUpWindow', 'height=535, width=469, resizable=no, scrollbars=no, toolbar=no, location=no,directories=no,status=no');">
             <title>Snake Game. Awards Pink Key.</title>
             <rect x="43" y="66" fill="#fff" opacity="0" width="237" height="402"></rect>
-        </a><a xlink:href="#maze">
+        </a><a onclick="window.open('maze/maze.html', 'popUpWindow', 'height=618, width=1080, resizable=no, scrollbars=no, toolbar=no, location=no,directories=no,status=no');">
             <title>Maze Game. Awards Purple Key.</title>
             <rect x="913" y="53" fill="#fff" opacity="0" width="231" height="427"></rect>
         </a><a xlink:href="#door">
@@ -114,23 +114,22 @@
     <script>
         var itemChoice;
         var playerName;
-        
+
             while (itemChoice != "yes" && itemChoice != "no") {
                 var playerName = prompt("What is your name?");
-                var itemChoice = prompt("A silver orb twinkles beside you. Do you want to pick it up?");
+                var itemChoice = prompt("A silver orb twinkles beside you. Do you want to pick it up?").toLowerCase();
                 console.log(itemChoice);
             }
-      
+
     </script>
 
     <!-- Memory Game (Janessa Johansson) -->
     <script src="memory.js"></script>
 
     <!-- Labyrinth (Rebecca Wallander) -->
-    <script src="maze/maze.js"></script>
 
     <!-- Typespeed Game (Martin K.) -->
-    <script src="JS-TypeSpeed/type.js"></script>
+
     <!-- Snake (Aaron S.) -->
 
 </body>
