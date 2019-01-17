@@ -27,6 +27,12 @@ var maxSpeed = 7;
 var lockInput = true;
 var countDownTimer;
 var interval;
+var mazeItemChoice;
+
+if (mazeItemChoice[0] == "y") {
+    maxSpeed = 4;
+    console.log("Speed decreased");
+}
 
 function points2vec(v1, v2) {
     return new vec2(v1.x - v2.x, v1.y - v2.y);
@@ -90,10 +96,12 @@ var timer = {
     start: Date.now(),
     textObject: undefined,
     run: false,
+    finalTime: 0,
     ellapsedTime: function () {
         return Date.now() - this.start;
     },
     formatTime: function (time) {
+        // This is wrong math
         var m = Math.floor(time / 60000);
         var s = ((time % 60000) / 1000).toFixed(0);
         var ms = time.toString().slice(-3);
@@ -102,7 +110,8 @@ var timer = {
     },
     update: function () {
         if (this.run) {
-            this.textObject.string = this.formatTime(this.ellapsedTime());
+            this.finalTime = this.ellapsedTime();
+            this.textObject.string = this.formatTime(this.finalTime);
         }
         this.textObject.update();
     }
@@ -168,8 +177,8 @@ function startMazeGame() {
     for (i in obsticleCoords) {
         obsticle.push(new rectangle(obsticleCoords[i][0], obsticleCoords[i][1], obsticleCoords[i][2], obsticleCoords[i][3]));
     }
-    cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "maze/assets/cheese.svg");
-    // cheese = new graphics(50 - 15, 200, 30, 30, "maze/assets/cheese.svg");
+    // cheese = new graphics(1024 - 85, 600 - 85, 30, 30, "maze/assets/cheese.svg");
+    cheese = new graphics(50 - 15, 200, 30, 30, "maze/assets/cheese.svg");
     countDownTimer = new text(5, screenWidth / 2, screenHeight / 2, "Arial", 100);
     timer.textObject = new text(timer.zero, screenWidth - 130, 40, "Arial", 30);
     interval = setInterval(countDown, 1000);
@@ -330,9 +339,21 @@ function updateGame() {
                 if (intersection.circleRectangle(animalBall, cheese)) {
                     cheese = undefined;
                     timer.run = false;
-                    console.log("You win the game!")
-                    addPurpleKey();
-                    document.getElementById("memory").outerHTML = "";
+                    setTimeout(function () {
+                        document.getElementById('win_maze').style.display = "block";
+                        document.getElementById('winfade_maze').style.display = "block";
+                        addPurpleKey();
+
+                        document.getElementById('okay_maze').onclick = function () {
+                            document.getElementById("maze").outerHTML = "";
+                            _canvas.parentNode.removeChild(_canvas);
+                            let removeGame = document.getElementsByClassName("maze2");
+
+                            Object.entries(removeGame).map((object) => {
+                                object[1].style.display = "none";
+                            });
+                        }
+                    }, 1000);
                 }
             }
 

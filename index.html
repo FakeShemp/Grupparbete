@@ -32,7 +32,7 @@
         </a><a onclick="window.open('Flappy_Bird_2/flappy_bird.html', 'popUpWindow', 'height=535, width=469, resizable=no, scrollbars=no, toolbar=no, location=no,directories=no,status=no');">
             <title>Snake Game. Awards Pink Key.</title>
             <rect x="43" y="66" fill="#fff" opacity="0" width="237" height="402"></rect>
-        </a><a onclick="window.open('maze/maze.html', 'popUpWindow', 'height=618, width=1080, resizable=no, scrollbars=no, toolbar=no, location=no,directories=no,status=no');">
+        </a><a xlink:href="#maze">
             <title>Maze Game. Awards Purple Key.</title>
             <rect id="maze" onclick="startMazeGame()" x="913" y="53" fill="#fff" opacity="0" width="231" height="427"></rect>
         </a><a xlink:href="#door">
@@ -109,18 +109,31 @@
             <button id="okay">Okay</button>
         </div>
     </div>
-    <!-- Character/Item (Janessa Johansson) -->
 
+    <!-- Maze Game -->
     <div class="mazeContainer"></div>
+    <div id="winfade_maze" class="maze2"></div>
+    <div class="wincontainer_maze">
+        <div id="win_maze" class="maze2">
+            <p>You win! You've earned a purple key!</p>
+            <img class="key_maze" src="maze/assets/prpl-olde-key.svg" alt="">
+            <button id="okay_maze">Okay</button>
+        </div>
+    </div>
 
+    <!-- Character/Item (Janessa Johansson) -->
     <script>
         var itemChoice;
+        var mazeItemChoice;
         var playerName;
 
             while (itemChoice != "yes" && itemChoice != "no") {
                 var playerName = prompt("What is your name?");
                 var itemChoice = prompt("A silver orb twinkles beside you. Do you want to pick it up?").toLowerCase();
                 console.log(itemChoice);
+            }    
+            while (mazeItemChoice != "yes" && mazeItemChoice != "no") {
+                var mazeItemChoice = prompt("A small piece of lint draws your attention. Do you want to pick it up?").toLowerCase();
             }
 
     </script>
@@ -129,6 +142,7 @@
     <script src="memory.js"></script>
 
     <!-- Labyrinth (Rebecca Wallander) -->
+    <script src="maze/maze.js"></script>
 
     <!-- Typespeed Game (Martin K.) -->
 
