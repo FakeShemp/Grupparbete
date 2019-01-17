@@ -249,7 +249,7 @@ function checkKeys() {
     });
 
     if (success == true) {
-        alert("The door opens with a creak and you run out. " +playerName+ ", you escaped the room!")
+        window.location.replace("escape.html");
     } else {
         alert("You need more keys, " +playerName + ". You have the following keys: " + playerKeys.join(", ") + ".")
     }
