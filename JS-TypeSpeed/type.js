@@ -1,8 +1,8 @@
 
-
+if(localStorage.itemChoice == 'yes') {
+  $('body').css({'background': 'silver'})
+}
 // Variabler som kommer användas i spelet
-var playerKeys
-var playername
 let level = 0 // Håller reda på vilken nivå spelaren är på.
 let round = 0 // Håller reda på vilken runda inom nivån.
 let countdown // Håller reda på nedräkning
@@ -74,9 +74,6 @@ function checkWord() {
                     start(level, round)
                 } else { // spelaren har vunnit spelet
                     endGame(true)
-                    let redKey = 'red key';
-                    playerKeys.push(redKey);
-                    console.log(playerKeys);
                 }
                 break
             default: // spelaren har en eller fler rundor kvar inom samma level
@@ -96,6 +93,7 @@ function endGame(winner) {
     clearTimeout(countdown)
     if (winner) {
         $('#gamewin').show()
+        localStorage.redKey = 'red key'
 
     }
     else {
@@ -122,7 +120,7 @@ function start(startLevel, startRound) {
     $('#gameover').hide()
 
     // Uppdatera information på spelskärmen
-    $('.playername').text(playername)
+    $('.playername').text(localStorage.playerName)
     $('#level').text(levels[level][3].levelName)
     $('#round').text(`Round ${round + 1} of 3`)
     $('#currentword').text(levels[level][round])
@@ -137,7 +135,7 @@ function start(startLevel, startRound) {
 
     // starta ny timer
     time = levels[level][3].timeLimit
-    countdown = setTimeout(endGame, levels[level][3].timeLimit)
+    countdown = setTimeout(endGame, levels[level][3].timeLimit + 500)
 
 
     // starta ny interval
