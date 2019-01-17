@@ -135,7 +135,7 @@ function start(startLevel, startRound) {
 
     // starta ny timer
     time = levels[level][3].timeLimit
-    countdown = setTimeout(endGame, levels[level][3].timeLimit)
+    countdown = setTimeout(endGame, levels[level][3].timeLimit + 500)
 
 
     // starta ny interval
