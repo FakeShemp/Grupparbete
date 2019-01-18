@@ -1,6 +1,6 @@
 var _canvas;
 var hamsterBall;
-var hamsterVector = new vec2(0,-1);
+var hamsterVector = new vec2(0, -1);
 var obsticle = new Array();
 var screenWidth = 1024;
 var screenHeight = 576;
@@ -31,9 +31,9 @@ var countDownTimer;
 var interval;
 var mazeItemChoice;
 var hedge = new Image();
-hedge.src = 'maze/assets/hedge.jpg'; 
+hedge.src = 'maze/assets/hedge.jpg';
 var ground = new Image();
-ground.src = 'maze/assets/ground.jpg'; 
+ground.src = 'maze/assets/ground.jpg';
 
 if (mazeItemChoice[0] == "y") {
     maxSpeed = 4;
@@ -95,7 +95,7 @@ function vec2(x, y) {
     this.inverse = function () {
         return new vec2(-this.x, -this.y);
     }
-    this.dot = function(v) {
+    this.dot = function (v) {
         return this.x * v.x + this.y * v.y;
     }
     this.determinant = function (v) {
@@ -233,6 +233,12 @@ var gameArea = {
         window.addEventListener("mouseup", function (e) {
             gameArea.mouseHold = false;
         }, false)
+        window.addEventListener('keydown', function (e) {
+            if (e.key == 'r') {
+                hamsterBall.position = new vec2(50, 50);
+                hamsterBall.previousPosition = new vec2(50 - minValue, 50 - minValue);
+            }
+        })
     },
     clear: function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -288,7 +294,7 @@ function rectangle(x, y, width, height) {
     }
     this.update = function () {
         ctx = gameArea.context;
-        
+
         var pattern = ctx.createPattern(hedge, "repeat");
         ctx.fillStyle = pattern;
 
@@ -397,9 +403,6 @@ function updateGame() {
             if (intersect != true) {
                 hamsterBall.newPosition(hamsterBall.position.add(newBallVector));
             }
-
-            // hamster.position.x = hamsterBall.position.x;
-            // hamster.position.y = hamsterBall.position.y;
         }
     }
 
@@ -435,5 +438,3 @@ function addPurpleKey() {
     playerKeys.push(purpleKey);
     console.log(playerKeys);
 }
-
-//window.onload = startMazeGame();
